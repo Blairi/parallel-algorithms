@@ -1,12 +1,14 @@
-#include<stdio.h>
+#include <stdio.h>
 #include <omp.h>
+
+static long num_steps = 100000;
+double step;
 
 int main()
 {
-    int num_steps = 1000000;
     int i;
     float x, pi, sum = 0.0;
-    float step = 1.0 / (float) num_steps;
+    step = 1.0 / (double) num_steps;
     double ini = omp_get_wtime();
     for (i = 0; i < num_steps; i++)
     {
@@ -15,7 +17,7 @@ int main()
     }
 
     pi = step * sum;
-    printf("Time:%f\n",omp_get_wtime()-ini);
+    printf("Time: %f\n",omp_get_wtime()-ini);
     printf("PI = %f\n", pi);
     
 }

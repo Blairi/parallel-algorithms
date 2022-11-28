@@ -4,41 +4,45 @@
 
 int main(){
 
-    int max = omp_get_max_threads();
+    int threads = omp_get_max_threads();
+    omp_set_num_threads(threads);
+    
+    double sumas[threads];
+    double suma = 0;
 
-    omp_set_num_threads(max);
+    double ini, fin;
 
-    double s = 0;
-    double ini = omp_get_wtime();
-    double sum[max];
+    ini = omp_get_wtime();
     #pragma omp parallel
     {
         int id = omp_get_thread_num();
-        double diferencial = 1.0/(float)NUM_STEPS;
 
-        double step = (double)max*diferencial;
+        double diferencial = 1.0 / (float) NUM_STEPS;
+
+        double step = (double)threads*diferencial;
+
         double x = (double)id*diferencial;
 
         double sub_sum = 0;
 
-        while(x<=1.00000){
+        while( x <= 1.0 ){
 
-            double fx = 4.0/(1+(x*x));
-            double area = diferencial*fx;
-            sub_sum+=area;
-            x+=step;
+            double fx = 4.0/( 1 + (x * x ) );
+            double area = diferencial * fx;
+            sub_sum += area;
+            x += step;
         }
 
-        sum[id]=sub_sum;
+        sumas[id] = sub_sum;
     }
 
-    int i = 0;
-    while(i<max){
-        s+=sum[i];
-        i+=1;
+    for (int i = 0; i < threads; i++)
+    {
+        suma += sumas[i];
     }
+    fin = omp_get_wtime();
 
-    printf("Time:%f\n",omp_get_wtime()-ini);
-    printf("Pi:%f\n",s);
+    printf("Time: %f\n", fin - ini);
+    printf("Pi: %f\n",suma);
     return 0;
 }
