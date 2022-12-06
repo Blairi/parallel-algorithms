@@ -13,7 +13,8 @@ int main(int argc, char const *argv[])
     {
         float B;
         int i, id, nthreads;
-        id = omp_get_team_num();
+        id = omp_get_thread_num();
+        nthreads = omp_get_num_threads();
         for ( i = id; i < niters; i++)
         {
             B = big_job( i );
